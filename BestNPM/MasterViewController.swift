@@ -51,7 +51,6 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
         self.tableView.reloadData()
         
         NpmDataSource.sharedInstance.delegate = self
-        NpmDataSource.sharedInstance.GetNpmPackage("fssss")
     }
 
     override func didReceiveMemoryWarning() {
@@ -69,8 +68,12 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
         print(result);
     }
     
-    func getSuggestionsResult(result: AnyObject!, error: NSError!) {
-        print(result);
+    func getSuggestionsResult(result: Array<String>!, error: NSError!) {
+        //print(result);
+        self.filteredTableData = result
+        dispatch_async(dispatch_get_main_queue(),{
+            self.tableView.reloadData()
+        })
     }
     
     func getGetNpmPackageResult(result:AnyObject!, error:NSError!){
@@ -99,6 +102,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (self.resultSearchController.active) {
+            print(self.filteredTableData)
             return self.filteredTableData.count
         }
         else {
@@ -137,12 +141,10 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
     func updateSearchResultsForSearchController(searchController: UISearchController)
     {
         filteredTableData.removeAll(keepCapacity: false)
-        
-        let searchPredicate = NSPredicate(format: "SELF CONTAINS[c] %@", searchController.searchBar.text)
-        let array = (objects as NSArray).filteredArrayUsingPredicate(searchPredicate)
-        filteredTableData = array as! [String]
-        
-        self.tableView.reloadData()
+        if(searchController.searchBar.text != ""){
+            NpmDataSource.sharedInstance.SuggestionsNpm(searchController.searchBar.text)
+        }
+
     }
 
 }
