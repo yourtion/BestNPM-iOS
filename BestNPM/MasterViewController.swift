@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MasterViewController: UITableViewController, UISearchResultsUpdating,UISearchBarDelegate, NpmDataSourceDelegate {
+class MasterViewController: UITableViewController, UISearchControllerDelegate, UISearchResultsUpdating, UISearchBarDelegate, NpmDataSourceDelegate {
 
     var detailViewController: DetailViewController? = nil
     var objects = NSArray()
@@ -35,6 +35,7 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating,UISea
         
         self.resultSearchController = ({
             let controller = UISearchController(searchResultsController: nil)
+            controller.delegate = self
             controller.searchResultsUpdater = self
             controller.dimsBackgroundDuringPresentation = false
             controller.searchBar.delegate = self
@@ -121,6 +122,15 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating,UISea
             startSearch(object)
         } else {
              self.performSegueWithIdentifier("showDetail", sender: nil)
+        }
+    }
+    
+    func willPresentSearchController(searchController: UISearchController) {
+        if(filteredTableData.count > 0){
+            objects = NSArray()
+            filteredTableData.removeAll(keepCapacity: false)
+            self.resultSearchController.searchBar.text = ""
+            self.reloadTable()
         }
     }
 
