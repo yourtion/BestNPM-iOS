@@ -8,10 +8,10 @@
 
 import UIKit
 
-class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmDataSourceDelegate {
+class MasterViewController: UITableViewController, UISearchResultsUpdating,UISearchBarDelegate, NpmDataSourceDelegate {
 
     var detailViewController: DetailViewController? = nil
-    var objects = [String]()
+    var objects = NSArray()
     var filteredTableData = [String]()
     var resultSearchController = UISearchController()
 
@@ -33,13 +33,11 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
         
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-        self.navigationItem.rightBarButtonItem = addButton
-        
         self.resultSearchController = ({
             let controller = UISearchController(searchResultsController: nil)
             controller.searchResultsUpdater = self
             controller.dimsBackgroundDuringPresentation = false
+            controller.searchBar.delegate = self
             controller.searchBar.sizeToFit()
             
             self.tableView.tableHeaderView = controller.searchBar
@@ -48,8 +46,8 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
         })()
         
         // Reload the table
-        self.tableView.reloadData()
-        
+
+        self.reloadTable()
         NpmDataSource.sharedInstance.delegate = self
     }
 
@@ -58,22 +56,15 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
         // Dispose of any resources that can be recreated.
     }
     
-    func insertNewObject(sender: AnyObject) {
-        objects.insert(NSDate().description, atIndex: 0)
-        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    }
-    
-    func getSearchResult(result: AnyObject!, error: NSError!) {
-        print(result);
+    func getSearchResult(result: NSArray!, error: NSError!) {
+        self.objects = result
+        self.reloadTable()
     }
     
     func getSuggestionsResult(result: Array<String>!, error: NSError!) {
         //print(result);
         self.filteredTableData = result
-        dispatch_async(dispatch_get_main_queue(),{
-            self.tableView.reloadData()
-        })
+        self.reloadTable()
     }
     
     func getGetNpmPackageResult(result:AnyObject!, error:NSError!){
@@ -85,9 +76,9 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
             if let indexPath = self.tableView.indexPathForSelectedRow() {
-                let object = objects[indexPath.row]
+                let object = objects[indexPath.row] as! NSDictionary
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object
+                controller.detailItem = object.description
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -117,24 +108,19 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
             cell.textLabel!.text = object
         }
         else {
-            let object = objects[indexPath.row]
-            cell.textLabel!.text = object
+            let object = objects[indexPath.row] as! NSDictionary
+            cell.textLabel!.text = object.objectForKey("name") as? String
         }
         
         return cell
     }
-
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            objects.removeAtIndex(indexPath.row)
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-        } else if editingStyle == .Insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if (self.resultSearchController.active) {
+            let object = filteredTableData[indexPath.row]
+            startSearch(object)
+        } else {
+             self.performSegueWithIdentifier("showDetail", sender: nil)
         }
     }
 
@@ -146,6 +132,27 @@ class MasterViewController: UITableViewController, UISearchResultsUpdating, NpmD
         }
 
     }
-
+    
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        self.startSearch(searchBar.text)
+    }
+    
+    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        self.resultSearchController.active = false
+        self.reloadTable()
+    }
+    
+    func startSearch(keywork:String){
+        NpmDataSource.sharedInstance.SearcNpm(keywork)
+        self.resultSearchController.active = false
+        self.resultSearchController.searchBar.text = keywork
+        self.reloadTable()
+    }
+    
+    func reloadTable() {
+        dispatch_async(dispatch_get_main_queue(),{
+            self.tableView.reloadData()
+        })
+    }
 }
 

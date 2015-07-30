@@ -14,6 +14,7 @@
 		CBB264DB1B6897E400F03846 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBB264DA1B6897E400F03846 /* Images.xcassets */; };
 		CBB264DE1B6897E400F03846 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBB264DC1B6897E400F03846 /* LaunchScreen.xib */; };
 		CBB264EA1B6897E400F03846 /* BestNPMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264E91B6897E400F03846 /* BestNPMTests.swift */; };
+		CBB264F61B6898EA00F03846 /* NpmDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264F51B6898EA00F03846 /* NpmDataSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		CBB264E31B6897E400F03846 /* BestNPMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BestNPMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBB264E81B6897E400F03846 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBB264E91B6897E400F03846 /* BestNPMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestNPMTests.swift; sourceTree = "<group>"; };
+		CBB264F51B6898EA00F03846 /* NpmDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NpmDataSource.swift; path = DataSource/NpmDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,8 @@
 		CBB264CE1B6897E400F03846 /* BestNPM */ = {
 			isa = PBXGroup;
 			children = (
+				CBB264F41B68989A00F03846 /* DataSource */,
+				CBB264F31B68988700F03846 /* CustomUI */,
 				CBB264D11B6897E400F03846 /* AppDelegate.swift */,
 				CBB264D31B6897E400F03846 /* MasterViewController.swift */,
 				CBB264D51B6897E400F03846 /* DetailViewController.swift */,
@@ -113,6 +117,21 @@
 				CBB264E81B6897E400F03846 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		CBB264F31B68988700F03846 /* CustomUI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = CustomUI;
+			sourceTree = "<group>";
+		};
+		CBB264F41B68989A00F03846 /* DataSource */ = {
+			isa = PBXGroup;
+			children = (
+				CBB264F51B6898EA00F03846 /* NpmDataSource.swift */,
+			);
+			name = DataSource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -215,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBB264F61B6898EA00F03846 /* NpmDataSource.swift in Sources */,
 				CBB264D61B6897E400F03846 /* DetailViewController.swift in Sources */,
 				CBB264D41B6897E400F03846 /* MasterViewController.swift in Sources */,
 				CBB264D21B6897E400F03846 /* AppDelegate.swift in Sources */,

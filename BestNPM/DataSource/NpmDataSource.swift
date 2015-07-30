@@ -9,7 +9,7 @@
 import Foundation
 
 protocol NpmDataSourceDelegate {
-    func getSearchResult(result:AnyObject!, error:NSError!)
+    func getSearchResult(result:NSArray!, error:NSError!)
     func getSuggestionsResult(result:Array<String>!, error:NSError!)
     func getGetNpmPackageResult(result:AnyObject!, error:NSError!)
 }
@@ -23,6 +23,7 @@ class NpmDataSource {
     private init() {} // 这就阻止其他对象使用这个类的默认的'()'初始化方法
     
     func SearcNpm (keyword:String) {
+        self.op.cancelAllOperations()
         let urlstr = "https://npm.best/api/search.json?query=" + keyword + "&skip=0&limit=10"
         let url = NSURL(string: urlstr)
         let urlrequest = NSURLRequest(URL: url!)
@@ -32,13 +33,18 @@ class NpmDataSource {
             (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
             
             NSLog("下载完成")
+            var json = NSJSONSerialization.JSONObjectWithData(data,options:NSJSONReadingOptions.AllowFragments,error:nil) as! NSDictionary
+            var result = json.objectForKey("result") as! NSDictionary
+            var list = result.objectForKey("list") as! NSArray
             
-            self.delegate?.getSearchResult(data, error: error)
+            self.delegate?.getSearchResult(list, error: error)
             
         }
     }
     
     func SuggestionsNpm (keyword:String) {
+        
+        self.op.cancelAllOperations()
         let urlstr = "https://npm.best/api/search/input/suggestions?type=start&query=" + keyword + "&skip=0&limit=10"
         let url = NSURL(string: urlstr)
         let urlrequest = NSURLRequest(URL: url!)
