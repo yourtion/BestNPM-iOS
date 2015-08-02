@@ -8,10 +8,10 @@
 
 import Foundation
 
-protocol NpmDataSourceDelegate {
-    func getSearchResult(result:NSArray!, error:NSError!)
-    func getSuggestionsResult(result:Array<String>!, error:NSError!)
-    func getGetNpmPackageResult(result:AnyObject!, error:NSError!)
+@objc protocol NpmDataSourceDelegate {
+    optional func getSearchResult(result:NSArray!, error:NSError!)
+    optional func getSuggestionsResult(result:Array<String>!, error:NSError!)
+    optional func getGetNpmPackageResult(result:AnyObject!, error:NSError!)
 }
 
 class NpmDataSource {
@@ -20,7 +20,7 @@ class NpmDataSource {
     let op:NSOperationQueue = NSOperationQueue()
     
     static let sharedInstance = NpmDataSource()
-    private init() {} // 这就阻止其他对象使用这个类的默认的'()'初始化方法
+    private init() {}
     
     func SearcNpm (keyword:String) {
         self.op.cancelAllOperations()
@@ -37,7 +37,11 @@ class NpmDataSource {
             var result = json.objectForKey("result") as! NSDictionary
             var list = result.objectForKey("list") as! NSArray
             
-            self.delegate?.getSearchResult(list, error: error)
+            if((self.delegate?.getSearchResult) != nil){
+                self.delegate?.getSearchResult!(list, error: error)
+            }else{
+                NSLog("Error")
+            }
             
         }
     }
@@ -63,7 +67,13 @@ class NpmDataSource {
             for (item) in list{
                 resList.append(item.objectForKey("w") as! String)
             }
-            self.delegate?.getSuggestionsResult(resList, error: error)
+            
+            
+            if((self.delegate?.getSuggestionsResult) != nil){
+                self.delegate?.getSuggestionsResult!(resList, error: error)
+            }else{
+                NSLog("Error")
+            }
             
         }
     }
@@ -77,7 +87,13 @@ class NpmDataSource {
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
             (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
             
-            self.delegate?.getGetNpmPackageResult(data, error: error)
+            
+            
+            if((self.delegate?.getGetNpmPackageResult) != nil){
+                self.delegate?.getGetNpmPackageResult!(data, error: error)
+            }else{
+                NSLog("Error")
+            }
             
         }
     }
