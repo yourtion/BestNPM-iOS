@@ -57,6 +57,8 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK: - NpmDataSourceDelegate
+    
     func getSearchResult(result: NSArray!, error: NSError!) {
         self.objects = result
         self.reloadTable()
@@ -66,10 +68,6 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
         //print(result);
         self.filteredTableData = result
         self.reloadTable()
-    }
-    
-    func getGetNpmPackageResult(result:AnyObject!, error:NSError!){
-        print(result);
     }
 
     // MARK: - Segues
@@ -91,6 +89,15 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
+    
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if (self.resultSearchController.active) {
+            return 44
+        }
+        else {
+            return 90
+        }
+    }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (self.resultSearchController.active) {
@@ -103,17 +110,20 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
         if (self.resultSearchController.active) {
+            let cell = tableView.dequeueReusableCellWithIdentifier("SearchCell", forIndexPath: indexPath) as! UITableViewCell
             let object = filteredTableData[indexPath.row]
             cell.textLabel!.text = object
+            return cell
         }
         else {
+            let cell = tableView.dequeueReusableCellWithIdentifier("NPMCell", forIndexPath: indexPath) as! NPMCell
             let object = objects[indexPath.row] as! NSDictionary
-            cell.textLabel!.text = object.objectForKey("name") as? String
+            cell.name!.text = object.objectForKey("name") as? String
+            cell.detail!.text = object.objectForKey("description") as? String
+            cell.infos!.text = object.objectForKey("modified") as? String
+            return cell
         }
-        
-        return cell
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -133,7 +143,15 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
             self.reloadTable()
         }
     }
+    
+    func reloadTable() {
+        dispatch_async(dispatch_get_main_queue(),{
+            self.tableView.reloadData()
+        })
+    }
 
+    // MARK: - SearchBar
+    
     func updateSearchResultsForSearchController(searchController: UISearchController)
     {
         filteredTableData.removeAll(keepCapacity: false)
@@ -159,10 +177,5 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
         self.reloadTable()
     }
     
-    func reloadTable() {
-        dispatch_async(dispatch_get_main_queue(),{
-            self.tableView.reloadData()
-        })
-    }
 }
 

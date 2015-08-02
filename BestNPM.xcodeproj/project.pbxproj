@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB0853291B6B6BCF009BD838 /* NPMCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0853281B6B6BCF009BD838 /* NPMCell.swift */; };
 		CBB264D21B6897E400F03846 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264D11B6897E400F03846 /* AppDelegate.swift */; };
 		CBB264D41B6897E400F03846 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264D31B6897E400F03846 /* MasterViewController.swift */; };
 		CBB264D61B6897E400F03846 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264D51B6897E400F03846 /* DetailViewController.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		CB0853281B6B6BCF009BD838 /* NPMCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NPMCell.swift; sourceTree = "<group>"; };
 		CBB264CC1B6897E400F03846 /* BestNPM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BestNPM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBB264D01B6897E400F03846 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBB264D11B6897E400F03846 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -81,8 +83,8 @@
 		CBB264CE1B6897E400F03846 /* BestNPM */ = {
 			isa = PBXGroup;
 			children = (
+				CB0853281B6B6BCF009BD838 /* NPMCell.swift */,
 				CBB264F41B68989A00F03846 /* DataSource */,
-				CBB264F31B68988700F03846 /* CustomUI */,
 				CBB264D11B6897E400F03846 /* AppDelegate.swift */,
 				CBB264D31B6897E400F03846 /* MasterViewController.swift */,
 				CBB264D51B6897E400F03846 /* DetailViewController.swift */,
@@ -117,13 +119,6 @@
 				CBB264E81B6897E400F03846 /* Info.plist */,
 			);
 			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		CBB264F31B68988700F03846 /* CustomUI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = CustomUI;
 			sourceTree = "<group>";
 		};
 		CBB264F41B68989A00F03846 /* DataSource */ = {
@@ -238,6 +233,7 @@
 				CBB264D61B6897E400F03846 /* DetailViewController.swift in Sources */,
 				CBB264D41B6897E400F03846 /* MasterViewController.swift in Sources */,
 				CBB264D21B6897E400F03846 /* AppDelegate.swift in Sources */,
+				CB0853291B6B6BCF009BD838 /* NPMCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,6 +431,7 @@
 				CBB264EF1B6897E400F03846 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		CBB264F01B6897E400F03846 /* Build configuration list for PBXNativeTarget "BestNPMTests" */ = {
 			isa = XCConfigurationList;
@@ -443,6 +440,7 @@
 				CBB264F21B6897E400F03846 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
