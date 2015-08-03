@@ -37,12 +37,7 @@ class NpmDataSource {
             var result = json.objectForKey("result") as! NSDictionary
             var list = result.objectForKey("list") as! NSArray
             
-            if((self.delegate?.getSearchResult) != nil){
-                self.delegate?.getSearchResult!(list, error: error)
-            }else{
-                NSLog("Error")
-            }
-            
+            self.delegate?.getSearchResult?(list, error: error)
         }
     }
     
@@ -68,12 +63,7 @@ class NpmDataSource {
                 resList.append(item.objectForKey("w") as! String)
             }
             
-            
-            if((self.delegate?.getSuggestionsResult) != nil){
-                self.delegate?.getSuggestionsResult!(resList, error: error)
-            }else{
-                NSLog("Error")
-            }
+            self.delegate?.getSuggestionsResult?(resList, error: error)
             
         }
     }
@@ -87,13 +77,7 @@ class NpmDataSource {
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
             (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
             
-            
-            
-            if((self.delegate?.getGetNpmPackageResult) != nil){
-                self.delegate?.getGetNpmPackageResult!(data, error: error)
-            }else{
-                NSLog("Error")
-            }
+            self.delegate?.getGetNpmPackageResult?(data, error: error)
             
         }
     }
