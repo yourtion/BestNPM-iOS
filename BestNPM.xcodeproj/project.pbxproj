@@ -16,6 +16,7 @@
 		CBB264DE1B6897E400F03846 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = CBB264DC1B6897E400F03846 /* LaunchScreen.xib */; };
 		CBB264EA1B6897E400F03846 /* BestNPMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264E91B6897E400F03846 /* BestNPMTests.swift */; };
 		CBB264F61B6898EA00F03846 /* NpmDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBB264F51B6898EA00F03846 /* NpmDataSource.swift */; };
+		CBC0A7331B6DC3CA00A81C34 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBC0A7321B6DC3CA00A81C34 /* Network.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +43,7 @@
 		CBB264E81B6897E400F03846 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBB264E91B6897E400F03846 /* BestNPMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestNPMTests.swift; sourceTree = "<group>"; };
 		CBB264F51B6898EA00F03846 /* NpmDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NpmDataSource.swift; path = DataSource/NpmDataSource.swift; sourceTree = "<group>"; };
+		CBC0A7321B6DC3CA00A81C34 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Network.swift; path = NetworkKit/Network.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +85,9 @@
 		CBB264CE1B6897E400F03846 /* BestNPM */ = {
 			isa = PBXGroup;
 			children = (
-				CB0853281B6B6BCF009BD838 /* NPMCell.swift */,
+				CBC0A7311B6DC38400A81C34 /* NetworkKit */,
 				CBB264F41B68989A00F03846 /* DataSource */,
+				CBC0A7301B6DC37200A81C34 /* UI */,
 				CBB264D11B6897E400F03846 /* AppDelegate.swift */,
 				CBB264D31B6897E400F03846 /* MasterViewController.swift */,
 				CBB264D51B6897E400F03846 /* DetailViewController.swift */,
@@ -127,6 +130,22 @@
 				CBB264F51B6898EA00F03846 /* NpmDataSource.swift */,
 			);
 			name = DataSource;
+			sourceTree = "<group>";
+		};
+		CBC0A7301B6DC37200A81C34 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				CB0853281B6B6BCF009BD838 /* NPMCell.swift */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		CBC0A7311B6DC38400A81C34 /* NetworkKit */ = {
+			isa = PBXGroup;
+			children = (
+				CBC0A7321B6DC3CA00A81C34 /* Network.swift */,
+			);
+			name = NetworkKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,6 +250,7 @@
 			files = (
 				CBB264F61B6898EA00F03846 /* NpmDataSource.swift in Sources */,
 				CBB264D61B6897E400F03846 /* DetailViewController.swift in Sources */,
+				CBC0A7331B6DC3CA00A81C34 /* Network.swift in Sources */,
 				CBB264D41B6897E400F03846 /* MasterViewController.swift in Sources */,
 				CBB264D21B6897E400F03846 /* AppDelegate.swift in Sources */,
 				CB0853291B6B6BCF009BD838 /* NPMCell.swift in Sources */,
@@ -365,6 +385,7 @@
 				INFOPLIST_FILE = BestNPM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -375,6 +396,7 @@
 				INFOPLIST_FILE = BestNPM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
