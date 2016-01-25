@@ -30,12 +30,12 @@ class NpmDataSource {
         //通过NSURLConnection发送请求
         NSLog("开始请求数据...")
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
-            (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
+            (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
             
             NSLog("下载完成")
-            var json = NSJSONSerialization.JSONObjectWithData(data,options:NSJSONReadingOptions.AllowFragments,error:nil) as! NSDictionary
-            var result = json.objectForKey("result") as! NSDictionary
-            var list = result.objectForKey("list") as! NSArray
+            let json = (try! NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
+            let result = json.objectForKey("result") as! NSDictionary
+            let list = result.objectForKey("list") as! NSArray
             
             self.delegate?.getSearchResult?(list, error: error)
         }
@@ -50,12 +50,12 @@ class NpmDataSource {
         //通过NSURLConnection发送请求
         NSLog("开始请求数据...")
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
-            (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
+            (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
             
             NSLog("下载完成")
-            var json = NSJSONSerialization.JSONObjectWithData(data,options:NSJSONReadingOptions.AllowFragments,error:nil) as! NSDictionary
-            var result = json.objectForKey("result") as! NSDictionary
-            var list = result.objectForKey("list") as! NSArray
+            let json = (try! NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
+            let result = json.objectForKey("result") as! NSDictionary
+            let list = result.objectForKey("list") as! NSArray
             
             var resList = [String]()
             
@@ -71,15 +71,17 @@ class NpmDataSource {
     func GetNpmPackage (package:String) {
         let urlstr = "http://registry.npmjs.org/" + package
         let url = NSURL(string: urlstr)
-        let urlrequest = NSURLRequest(URL: url!)
+//        let urlrequest = NSURLRequest(URL: url!)
         //通过NSURLConnection发送请求
         NSLog("开始请求数据...")
-        NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
-            (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
-            
-            self.delegate?.getGetNpmPackageResult?(data, error: error)
-            
-        }
+        let data = NSData(contentsOfURL: url!)
+        self.delegate?.getGetNpmPackageResult!(data, error: nil)
+//        NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
+//            (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
+//            
+////            self.delegate?.getGetNpmPackageResult(data, error: error)
+//            
+//        }
     }
     
 }

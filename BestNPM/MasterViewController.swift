@@ -30,7 +30,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
 
         if let split = self.splitViewController {
             let controllers = split.viewControllers
-            self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
+            self.detailViewController = controllers.last as? DetailViewController
         }
         
         self.resultSearchController = ({
@@ -74,7 +74,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "showDetail" {
-            if let indexPath = self.tableView.indexPathForSelectedRow() {
+            if let indexPath = self.tableView.indexPathForSelectedRow {
                 let object = objects[indexPath.row] as! NSDictionary
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object.description
@@ -101,7 +101,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if (self.resultSearchController.active) {
-            print(self.filteredTableData)
+            print(self.filteredTableData, terminator: "")
             return self.filteredTableData.count
         }
         else {
@@ -111,7 +111,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         if (self.resultSearchController.active) {
-            let cell = tableView.dequeueReusableCellWithIdentifier("SearchCell", forIndexPath: indexPath) as! UITableViewCell
+            let cell = tableView.dequeueReusableCellWithIdentifier("SearchCell", forIndexPath: indexPath) 
             let object = filteredTableData[indexPath.row]
             cell.textLabel!.text = object
             return cell
@@ -156,13 +156,13 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     {
         filteredTableData.removeAll(keepCapacity: false)
         if(searchController.searchBar.text != ""){
-            NpmDataSource.sharedInstance.SuggestionsNpm(searchController.searchBar.text)
+            NpmDataSource.sharedInstance.SuggestionsNpm(searchController.searchBar.text!)
         }
 
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        self.startSearch(searchBar.text)
+        self.startSearch(searchBar.text!)
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
