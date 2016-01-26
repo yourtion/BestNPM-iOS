@@ -171,7 +171,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     }
     
     func startSearch(keywork:String){
-        NpmDataSource.sharedInstance.SearcNpm(keywork)
+        NpmDataSource.sharedInstance.SearchNpm(keywork)
         self.resultSearchController.active = false
         self.resultSearchController.searchBar.text = keywork
         self.reloadTable()

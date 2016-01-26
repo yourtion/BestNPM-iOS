@@ -22,16 +22,18 @@ class NpmDataSource {
     static let sharedInstance = NpmDataSource()
     private init() {}
     
-    func SearcNpm (keyword:String) {
+    func SearchNpm (keyword:String) {
         self.op.cancelAllOperations()
         let urlstr = "https://npm.best/api/search.json?query=" + keyword + "&skip=0&limit=10"
         let url = NSURL(string: urlstr)
         let urlrequest = NSURLRequest(URL: url!)
         //通过NSURLConnection发送请求
-        NSLog("开始请求数据...")
+        NSLog("SearchNpm 开始请求数据...")
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
             (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
-            
+            if (data == nil){
+                return (self.delegate?.getSearchResult?(nil, error: error))!
+            }
             NSLog("下载完成")
             let json = (try! NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
             let result = json.objectForKey("result") as! NSDictionary
@@ -48,10 +50,12 @@ class NpmDataSource {
         let url = NSURL(string: urlstr)
         let urlrequest = NSURLRequest(URL: url!)
         //通过NSURLConnection发送请求
-        NSLog("开始请求数据...")
+        NSLog("SuggestionsNpm 开始请求数据...")
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
             (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
-            
+            if (data == nil){
+                return (self.delegate?.getSuggestionsResult?(nil, error: error))!
+            }
             NSLog("下载完成")
             let json = (try! NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
             let result = json.objectForKey("result") as! NSDictionary
@@ -71,17 +75,15 @@ class NpmDataSource {
     func GetNpmPackage (package:String) {
         let urlstr = "http://registry.npmjs.org/" + package
         let url = NSURL(string: urlstr)
-//        let urlrequest = NSURLRequest(URL: url!)
+        let urlrequest = NSURLRequest(URL: url!)
         //通过NSURLConnection发送请求
-        NSLog("开始请求数据...")
-        let data = NSData(contentsOfURL: url!)
-        self.delegate?.getGetNpmPackageResult!(data, error: nil)
-//        NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
-//            (response:NSURLResponse!, data:NSData!, error:NSError!) -> Void in
-//            
-////            self.delegate?.getGetNpmPackageResult(data, error: error)
-//            
-//        }
+        NSLog("GetNpmPackage 开始请求数据...")
+        NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
+            (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
+            
+            self.delegate?.getGetNpmPackageResult!(data, error: nil)
+            
+        }
     }
     
 }
