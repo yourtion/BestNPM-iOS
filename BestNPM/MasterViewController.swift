@@ -60,14 +60,18 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     // MARK: - NpmDataSourceDelegate
     
     func getSearchResult(result: NSArray!, error: NSError!) {
-        self.objects = result
-        self.reloadTable()
+        if (result != nil) {
+            self.objects = result
+            self.reloadTable()
+        }
     }
     
     func getSuggestionsResult(result: Array<String>!, error: NSError!) {
         //print(result);
-        self.filteredTableData = result
-        self.reloadTable()
+        if (result != nil) {
+            self.filteredTableData = result
+            self.reloadTable()
+        }
     }
 
     // MARK: - Segues
@@ -170,10 +174,10 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
         self.reloadTable()
     }
     
-    func startSearch(keywork:String){
-        NpmDataSource.sharedInstance.SearchNpm(keywork)
+    func startSearch(keyword:String){
+        NpmDataSource.sharedInstance.SearchNpm(keyword)
         self.resultSearchController.active = false
-        self.resultSearchController.searchBar.text = keywork
+        self.resultSearchController.searchBar.text = keyword
         self.reloadTable()
     }
     

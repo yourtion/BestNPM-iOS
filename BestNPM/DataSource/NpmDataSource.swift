@@ -23,10 +23,10 @@ class NpmDataSource {
     private init() {}
     
     func SearchNpm (keyword:String) {
-        self.op.cancelAllOperations()
         let urlstr = "https://npm.best/api/search.json?query=" + keyword + "&skip=0&limit=10"
-        let url = NSURL(string: urlstr)
-        let urlrequest = NSURLRequest(URL: url!)
+        guard let url = NSURL(string: urlstr)  else { return }
+        let urlrequest = NSURLRequest(URL: url)
+        self.op.cancelAllOperations()
         //通过NSURLConnection发送请求
         NSLog("SearchNpm 开始请求数据...")
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
@@ -35,40 +35,47 @@ class NpmDataSource {
                 return (self.delegate?.getSearchResult?(nil, error: error))!
             }
             NSLog("下载完成")
-            let json = (try! NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
-            let result = json.objectForKey("result") as! NSDictionary
-            let list = result.objectForKey("list") as! NSArray
-            
-            self.delegate?.getSearchResult?(list, error: error)
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments) as! NSDictionary
+                let result = json.objectForKey("result") as! NSDictionary
+                let list = result.objectForKey("list") as! NSArray
+                
+                self.delegate?.getSearchResult?(list, error: error)
+                
+            } catch {
+                print("error serializing JSON: \(error)")
+            }
         }
     }
     
     func SuggestionsNpm (keyword:String) {
-        
-        self.op.cancelAllOperations()
         let urlstr = "https://npm.best/api/search/input/suggestions?type=start&query=" + keyword + "&skip=0&limit=10"
-        let url = NSURL(string: urlstr)
-        let urlrequest = NSURLRequest(URL: url!)
+        guard let url = NSURL(string: urlstr) else { return }
+        self.op.cancelAllOperations()
+        let urlrequest = NSURLRequest(URL: url)
         //通过NSURLConnection发送请求
         NSLog("SuggestionsNpm 开始请求数据...")
         NSURLConnection.sendAsynchronousRequest(urlrequest, queue: self.op) {
             (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
-            if (data == nil){
+            guard let data = data else {
                 return (self.delegate?.getSuggestionsResult?(nil, error: error))!
             }
             NSLog("下载完成")
-            let json = (try! NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments)) as! NSDictionary
-            let result = json.objectForKey("result") as! NSDictionary
-            let list = result.objectForKey("list") as! NSArray
-            
-            var resList = [String]()
-            
-            for (item) in list{
-                resList.append(item.objectForKey("w") as! String)
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as! NSDictionary
+                let result = json.objectForKey("result") as! NSDictionary
+                let list = result.objectForKey("list") as! NSArray
+                
+                var resList = [String]()
+                for (item) in list{
+                    resList.append(item.objectForKey("w") as! String)
+                }
+                
+                self.delegate?.getSuggestionsResult?(resList, error: error)
+                
+            } catch {
+                print("error serializing JSON: \(error)")
             }
-            
-            self.delegate?.getSuggestionsResult?(resList, error: error)
-            
         }
     }
     
@@ -82,8 +89,11 @@ class NpmDataSource {
             (response:NSURLResponse?, data:NSData?, error:NSError?) -> Void in
             
             self.delegate?.getGetNpmPackageResult!(data, error: nil)
-            
         }
+    }
+    
+    func cancleAllRequest() {
+        self.op.cancelAllOperations()
     }
     
 }
