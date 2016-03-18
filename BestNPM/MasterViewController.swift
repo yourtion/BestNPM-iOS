@@ -14,6 +14,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     var objects = NSArray()
     var filteredTableData = [String]()
     var resultSearchController = UISearchController()
+    var suggestionTimer:NSTimer!
 
 
     override func awakeFromNib() {
@@ -27,10 +28,18 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-
+        self.navigationItem.title = "BestNPM"
+        
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = controllers.last as? DetailViewController
+        }
+        
+        if #available(iOS 9.0, *) {
+            self.resultSearchController.loadViewIfNeeded() // iOS 9
+        } else {
+            // Fallback on earlier versions
+            let _ = self.resultSearchController.view // iOS 8
         }
         
         self.resultSearchController = ({
@@ -47,7 +56,6 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
         })()
         
         // Reload the table
-
         self.reloadTable()
         NpmDataSource.sharedInstance.delegate = self
     }
@@ -82,6 +90,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
                 let object = objects[indexPath.row] as! NSDictionary
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
                 controller.detailItem = object.description
+                controller.name = object.objectForKey("name") as? String
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -159,10 +168,13 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     func updateSearchResultsForSearchController(searchController: UISearchController)
     {
         filteredTableData.removeAll(keepCapacity: false)
-        if(searchController.searchBar.text != ""){
-            NpmDataSource.sharedInstance.SuggestionsNpm(searchController.searchBar.text!)
+        if (suggestionTimer != nil) {
+            suggestionTimer.invalidate()
         }
-
+        let keyword = searchController.searchBar.text!
+        if(keyword != ""){
+            suggestionTimer = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector:"getSuggestions:", userInfo:keyword, repeats: false)
+        }
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
@@ -170,8 +182,14 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+        NpmDataSource.sharedInstance.cancleAllRequest()
         self.resultSearchController.active = false
         self.reloadTable()
+    }
+    
+    func getSuggestions(timer: NSTimer!){
+        let keyword = timer.userInfo as! String
+        NpmDataSource.sharedInstance.SuggestionsNpm(keyword)
     }
     
     func startSearch(keyword:String){

@@ -17,8 +17,13 @@ class NPMCell: UITableViewCell {
     
     override func drawRect(rect: CGRect) {
         self.icon!.image = self.getIconFrom(self.name.text, size: self.icon!.frame.size.width*2)
-        self.icon.layer.masksToBounds = true;
-        self.icon.layer.cornerRadius = self.icon.frame.size.width/2
+        let maskPath = UIBezierPath(roundedRect: self.icon.bounds,
+                              byRoundingCorners: .AllCorners,
+                                    cornerRadii: CGSize(width: self.icon!.frame.size.width/2, height: self.icon!.frame.width/2))
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = self.icon!.bounds
+        maskLayer.path = maskPath.CGPath
+        self.icon.layer.mask = maskLayer
     }
     
     func getIconFrom(var str:String!,size:CGFloat) -> UIImage{
