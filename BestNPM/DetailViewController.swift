@@ -9,31 +9,18 @@
 import UIKit
 
 class DetailViewController: UIViewController {
-
-    @IBOutlet weak var detailDescriptionLabel: UILabel!
+    
+    @IBOutlet weak var webview: UIWebView!
     var name:String!
-
-    var detailItem: AnyObject? {
-        didSet {
-            // Update the view.
-            self.configureView()
-        }
-    }
-
-    func configureView() {
-        // Update the user interface for the detail item.
-        if let detail: AnyObject = self.detailItem {
-            if let label = self.detailDescriptionLabel {
-                label.text = detail.description
-            }
-        }
-    }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.navigationItem.title = name
-        self.configureView()
+        if(name != nil){
+            self.navigationItem.title = name
+            let request = NSURLRequest(URL: NSURL(string:"https://www.npmjs.com/package/" + name)!)
+            webview.loadRequest(request)
+        }
     }
 
     override func didReceiveMemoryWarning() {

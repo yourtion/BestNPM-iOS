@@ -89,7 +89,6 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
             if let indexPath = self.tableView.indexPathForSelectedRow {
                 let object = objects[indexPath.row] as! NSDictionary
                 let controller = (segue.destinationViewController as! UINavigationController).topViewController as! DetailViewController
-                controller.detailItem = object.description
                 controller.name = object.objectForKey("name") as? String
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
@@ -145,6 +144,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
             startSearch(object)
         } else {
              self.performSegueWithIdentifier("showDetail", sender: nil)
+            
         }
     }
     
