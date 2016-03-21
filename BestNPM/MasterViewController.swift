@@ -68,10 +68,13 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     // MARK: - NpmDataSourceDelegate
     
     func getSearchResult(result: NSArray!, error: NSError!) {
+        dispatch_async(dispatch_get_main_queue(),{
+            self.clearAllNotice()
+        })
         if (result != nil) {
             self.objects = result
             self.reloadTable()
-        }
+        } 
     }
     
     func getSuggestionsResult(result: Array<String>!, error: NSError!) {
@@ -178,6 +181,7 @@ class MasterViewController: UITableViewController, UISearchControllerDelegate, U
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        self.pleaseWait()
         self.startSearch(searchBar.text!)
     }
     

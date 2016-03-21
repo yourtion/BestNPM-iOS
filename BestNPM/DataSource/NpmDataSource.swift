@@ -34,7 +34,7 @@ class NpmDataSource {
             if (data == nil){
                 return (self.delegate?.getSearchResult?(nil, error: error))!
             }
-            NSLog("下载完成")
+            NSLog("SearchNpm 下载完成")
             do {
                 let json = try NSJSONSerialization.JSONObjectWithData(data!,options:NSJSONReadingOptions.AllowFragments) as! NSDictionary
                 let result = json.objectForKey("result") as! NSDictionary
@@ -60,7 +60,7 @@ class NpmDataSource {
             guard let data = data else {
                 return (self.delegate?.getSuggestionsResult?(nil, error: error))!
             }
-            NSLog("下载完成")
+            NSLog("SuggestionsNpm 下载完成")
             do {
                 let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments) as! NSDictionary
                 let result = json.objectForKey("result") as! NSDictionary
